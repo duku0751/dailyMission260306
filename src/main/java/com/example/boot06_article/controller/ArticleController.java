@@ -8,9 +8,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -49,6 +51,18 @@ public class ArticleController {
         model.addAttribute("page", articleService.findAll(pageable));
         return "article-list";
 
+    }
+
+    @GetMapping("/search")
+    public String getArticleSearch(@RequestParam(value = "searchType", required = false) String searchType,
+                                   @RequestParam(value = "keyword", required = false) String keyword,
+                                   @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+                                   Model model) {
+        Page<ArticleDto> articleDtos = articleService.findByKeyword(searchType, keyword, pageable);
+        model.addAttribute("page", articleDtos);
+        model.addAttribute("searchType", searchType);
+        model.addAttribute("keyword", keyword);
+        return "article-list";
     }
 
     @GetMapping("/content")

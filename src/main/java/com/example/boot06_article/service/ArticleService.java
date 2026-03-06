@@ -12,8 +12,10 @@ import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -33,6 +35,21 @@ public class ArticleService {
 
     public ArticleDto findById(Long id) {
         return articleRepository.findById(id).map(this::mapToArticleDto).orElseThrow();
+    }
+
+    public Page<ArticleDto> findByKeyword(String searchType, String keyword, Pageable pageable) {
+        String title = null;
+        String description = null;
+        String memberName = null;
+        if (StringUtils.hasText(searchType) && StringUtils.hasText(keyword)) {
+            switch (searchType) {
+                case "title" -> title = keyword;
+                case "description" -> description = keyword;
+                case "memberName" -> memberName = keyword;
+            }
+        }
+        return articleRepository.queryByKeyword(title, description, memberName, pageable)
+                .map(this::mapToArticleDto);
     }
 
     public ArticleDto create(Long memberId, ArticleForm articleForm) {

@@ -5,7 +5,7 @@ import com.example.boot06_article.model.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-public interface ArticleRepository extends JpaRepository<Article, Long> {
+public interface ArticleRepository extends JpaRepository<Article, Long>, ArticleQueryDslRepository {
     @Transactional
     void deleteAllByMember(Member member);
 }

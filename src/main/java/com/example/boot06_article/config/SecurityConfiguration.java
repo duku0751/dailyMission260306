@@ -28,7 +28,7 @@ public class SecurityConfiguration {
         http
                 .csrf(withDefaults())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/article/list", "/article/content").permitAll()
+                        .requestMatchers("/", "/article/list", "/article/content", "/article/search").permitAll()
                         .requestMatchers("/member/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/signup").permitAll()
                         .anyRequest().authenticated())
