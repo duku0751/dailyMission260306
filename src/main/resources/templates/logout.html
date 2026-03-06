@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="ko"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{base-layout::layout(~{::section})}">
+<body>
+<section class="container">
+    <h1>로그아웃 하시겠습니까?</h1>
+    <form action="login.html" th:action="@{/logout}" method="post">
+        <button type="submit" class="btn btn-primary">로그아웃</button>
+    </form>
+</section>
+</body>
+</html>
